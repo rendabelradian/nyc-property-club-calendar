@@ -162,7 +162,7 @@ if __name__ == "__main__":
     # Copy report to index.html for GitHub Pages
     shutil.copy("report.html", "index.html")
 
-    # Save ICS calendar
+    # Save ICS calendar with proper times
     cal = Calendar()
     ny_tz = pytz.timezone("America/New_York")
 
@@ -171,22 +171,23 @@ if __name__ == "__main__":
             e = Event()
             e.name = f"{row['club']} — {row['title']}"
 
-            # Assign times per club
-            if row["club"] == "Emerald Guild":
-                dt = dateparser.parse(row["date"] + " 17:00")
-                e.begin = ny_tz.localize(dt)
-                e.duration = timedelta(hours=3)
-            elif row["club"] == "NYBMA":
-                dt = dateparser.parse(row["date"] + " 19:30")
-                e.begin = ny_tz.localize(dt)
-                e.duration = timedelta(hours=2)
-            elif row["club"] == "Manhattan Resident Managers Club":
-                dt = dateparser.parse(row["date"] + " 18:00")
-                e.begin = ny_tz.localize(dt)
-                e.duration = timedelta(hours=3)
-            else:
-                # IBMA or unknown → all-day
-                e.begin = row["date"]
+            if row["date"]:
+                if row["club"] == "Emerald Guild":
+                    dt = datetime.strptime(row["date"], "%Y-%m-%d")
+                    e.begin = ny_tz.localize(dt.replace(hour=17, minute=0))
+                    e.end = ny_tz.localize(dt.replace(hour=20, minute=0))
+                elif row["club"] == "NYBMA":
+                    dt = datetime.strptime(row["date"], "%Y-%m-%d")
+                    e.begin = ny_tz.localize(dt.replace(hour=19, minute=30))
+                    e.end = ny_tz.localize(dt.replace(hour=21, minute=30))
+                elif row["club"] == "Manhattan Resident Managers Club":
+                    dt = datetime.strptime(row["date"], "%Y-%m-%d")
+                    e.begin = ny_tz.localize(dt.replace(hour=18, minute=0))
+                    e.end = ny_tz.localize(dt.replace(hour=21, minute=0))
+                else:  # IBMA default if time unknown
+                    dt = datetime.strptime(row["date"], "%Y-%m-%d")
+                    e.begin = ny_tz.localize(dt.replace(hour=18, minute=0))
+                    e.end = ny_tz.localize(dt.replace(hour=21, minute=0))
 
             if row["location"] != "N/A":
                 e.location = row["location"]
