@@ -187,9 +187,9 @@ if __name__ == "__main__":
                     start = ny_tz.localize(dt.replace(hour=18, minute=0))
                     end = ny_tz.localize(dt.replace(hour=21, minute=0))
 
-                # Force ISO strings with timezone offset
-                e.begin = start.isoformat()
-                e.end = end.isoformat()
+                # ✅ Keep as datetime objects with tzinfo
+                e.begin = start
+                e.end = end
 
             if row["location"] != "N/A":
                 e.location = row["location"]
