@@ -1,10 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import re
 from dateutil import parser as dateparser
 from ics import Calendar, Event
+import pytz
 import shutil
 
 # -------------------------
@@ -18,7 +19,6 @@ def parse_date_from_text(text):
         except:
             return None
     return None
-
 
 # -------------------------
 # Scrapers
@@ -101,7 +101,6 @@ def scrape_nybma():
         "source_url": url
     }]
 
-
 # -------------------------
 # Manhattan Resident Managers Club (first Thursday logic)
 # -------------------------
@@ -117,14 +116,11 @@ def scrape_mrmclub():
     soup = BeautifulSoup(r.text, "html.parser")
 
     events = []
-    # Generate Oct 2025 – Jun 2026
-    months = [
-        (2025, 10), (2025, 11), (2025, 12),
-        (2026, 1), (2026, 2), (2026, 3),
-        (2026, 4), (2026, 5), (2026, 6),
-    ]
-
-    for year, month in months:
+    # Generate 12 months from now
+    today = date.today()
+    for i in range(12):
+        year = (today.year + (today.month + i - 1) // 12)
+        month = (today.month + i - 1) % 12 + 1
         d = first_thursday(year, month)
         events.append({
             "club": "Manhattan Resident Managers Club",
@@ -134,7 +130,6 @@ def scrape_mrmclub():
             "source_url": "https://mrmclub.com/"
         })
     return events
-
 
 # -------------------------
 # Main runner
@@ -169,15 +164,35 @@ if __name__ == "__main__":
 
     # Save ICS calendar
     cal = Calendar()
+    ny_tz = pytz.timezone("America/New_York")
+
     for _, row in df.iterrows():
         try:
             e = Event()
             e.name = f"{row['club']} — {row['title']}"
-            e.begin = row["date"]
+
+            # Assign times per club
+            if row["club"] == "Emerald Guild":
+                dt = dateparser.parse(row["date"] + " 17:00")
+                e.begin = ny_tz.localize(dt)
+                e.duration = timedelta(hours=3)
+            elif row["club"] == "NYBMA":
+                dt = dateparser.parse(row["date"] + " 19:30")
+                e.begin = ny_tz.localize(dt)
+                e.duration = timedelta(hours=2)
+            elif row["club"] == "Manhattan Resident Managers Club":
+                dt = dateparser.parse(row["date"] + " 18:00")
+                e.begin = ny_tz.localize(dt)
+                e.duration = timedelta(hours=3)
+            else:
+                # IBMA or unknown → all-day
+                e.begin = row["date"]
+
             if row["location"] != "N/A":
                 e.location = row["location"]
             if row["source_url"]:
                 e.url = row["source_url"]
+
             cal.events.add(e)
         except Exception as ex:
             print(f"⚠️ Could not add event: {ex}")
