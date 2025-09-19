@@ -1,10 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 import re
 from dateutil import parser as dateparser
 from ics import Calendar, Event
+import shutil
 
 # -------------------------
 # Helper: parse "September 11, 2025" from text
@@ -17,6 +18,7 @@ def parse_date_from_text(text):
         except:
             return None
     return None
+
 
 # -------------------------
 # Scrapers
@@ -53,8 +55,8 @@ def scrape_emerald_guild():
                 )
                 if loc_el:
                     location = loc_el.get_text(" ", strip=True)
-            except Exception as ex:
-                print(f"⚠️ Could not fetch Emerald Guild location: {ex}")
+            except:
+                pass
 
         events.append({
             "club": "Emerald Guild",
@@ -99,6 +101,7 @@ def scrape_nybma():
         "source_url": url
     }]
 
+
 # -------------------------
 # Manhattan Resident Managers Club (first Thursday logic)
 # -------------------------
@@ -132,6 +135,7 @@ def scrape_mrmclub():
         })
     return events
 
+
 # -------------------------
 # Main runner
 # -------------------------
@@ -144,10 +148,6 @@ if __name__ == "__main__":
     all_events.extend(scrape_mrmclub())
 
     df = pd.DataFrame(all_events)
-
-    # Filter out past events
-    today = date.today().isoformat()
-    df = df[df["date"].notna() & (df["date"] >= today)]
 
     # Save CSV
     df.to_csv("events.csv", index=False)
@@ -164,7 +164,10 @@ if __name__ == "__main__":
             f.write("</li><br>\n")
         f.write("</ul>\n")
 
-    # Save ICS calendar file
+    # Copy report to index.html for GitHub Pages
+    shutil.copy("report.html", "index.html")
+
+    # Save ICS calendar
     cal = Calendar()
     for _, row in df.iterrows():
         try:
@@ -182,4 +185,4 @@ if __name__ == "__main__":
     with open("events.ics", "w") as f:
         f.writelines(cal)
 
-    print("✅ Scraping complete. See events.csv, report.html, and events.ics")
+    print("✅ Scraping complete. See events.csv, report.html, index.html, and events.ics")

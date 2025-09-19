@@ -1,0 +1,88 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:ics.py - http://git.io/lLljaA
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20260402T000000Z
+SUMMARY:Manhattan Resident Managers Club — Monthly Meeting
+UID:dacbbb66-39db-496e-ab3e-1af8e7b95ed3@dacb.org
+URL:https://mrmclub.com/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20260305T000000Z
+SUMMARY:Manhattan Resident Managers Club — Monthly Meeting
+UID:0397f993-03b0-4678-aeb8-51ba3feca3e4@0397.org
+URL:https://mrmclub.com/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20260101T000000Z
+SUMMARY:Manhattan Resident Managers Club — Monthly Meeting
+UID:4352b34b-9c2d-4b59-bf2d-029b53d60431@4352.org
+URL:https://mrmclub.com/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:St. Pats Bar & Grill\, 22 West 46th Street\, New York\, NY
+DTSTART:20250908T000000Z
+SUMMARY:Illyrian BMA — Monthly Meeting
+UID:c9886b6e-2bea-40ea-8b5e-970fb2e0540f@c988.org
+URL:https://www.ibmanyc.com/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20251204T000000Z
+SUMMARY:Manhattan Resident Managers Club — Monthly Meeting
+UID:aa8f068e-ca96-4e7b-a1c2-1fc8692dbb50@aa8f.org
+URL:https://mrmclub.com/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20260604T000000Z
+SUMMARY:Manhattan Resident Managers Club — Monthly Meeting
+UID:c7841854-ed8d-40f3-8a48-69f6d0a35b35@c784.org
+URL:https://mrmclub.com/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20250911T000000Z
+SUMMARY:NYBMA — Business Meeting
+UID:1da3526e-2090-46f6-af65-24ae709f2b2c@1da3.org
+URL:https://nybma.org/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20260205T000000Z
+SUMMARY:Manhattan Resident Managers Club — Monthly Meeting
+UID:0064ed31-8361-4a65-86cb-22e6f5ec4454@0064.org
+URL:https://mrmclub.com/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20260507T000000Z
+SUMMARY:Manhattan Resident Managers Club — Monthly Meeting
+UID:dc2fe20c-05a9-4084-b4d6-0808a2c6a42b@dc2f.org
+URL:https://mrmclub.com/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:East 42nd Street and\, 1st Ave. New York \, NY 10016 United States
+DTSTART:20250918T000000Z
+SUMMARY:Emerald Guild — Lark in the Park
+UID:8cef2aeb-2d32-4550-8fa9-b8a8872b8d13@8cef.org
+URL:https://emeraldguild.org/event/lark-in-the-park-2025/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20251106T000000Z
+SUMMARY:Manhattan Resident Managers Club — Monthly Meeting
+UID:a9bf53c4-ee79-4c05-9d02-5fc45c8af444@a9bf.org
+URL:https://mrmclub.com/
+END:VEVENT
+BEGIN:VEVENT
+LOCATION:Connolly’s Pub & Restaurant\, 121 West 45th St\, New York\, NY 10036
+DTSTART:20251002T000000Z
+SUMMARY:Manhattan Resident Managers Club — Monthly Meeting
+UID:8ecf4b39-8e7c-411e-93b1-e234c38e666f@8ecf.org
+URL:https://mrmclub.com/
+END:VEVENT
+END:VCALENDAR
