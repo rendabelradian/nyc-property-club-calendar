@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime, date, timedelta
 import re
 from dateutil import parser as dateparser
+from ics import Calendar, Event
 
 # -------------------------
 # Helper: parse "September 11, 2025" from text
@@ -16,7 +17,6 @@ def parse_date_from_text(text):
         except:
             return None
     return None
-
 
 # -------------------------
 # Scrapers
@@ -40,19 +40,21 @@ def scrape_emerald_guild():
             else None
         )
 
-        # 🔥 New: drill into detail page for location
+        # Drill into detail page for location
         location = "N/A"
         if link:
             try:
                 detail_html = requests.get(link).text
                 detail_soup = BeautifulSoup(detail_html, "html.parser")
                 loc_el = detail_soup.select_one(
-                    "div.tribe-events-venue-details, div.tribe-events-calendar-list__event-venue, span.tribe-address"
+                    "div.tribe-events-venue-details, "
+                    "div.tribe-events-calendar-list__event-venue, "
+                    "span.tribe-address"
                 )
                 if loc_el:
                     location = loc_el.get_text(" ", strip=True)
-            except:
-                pass
+            except Exception as ex:
+                print(f"⚠️ Could not fetch Emerald Guild location: {ex}")
 
         events.append({
             "club": "Emerald Guild",
@@ -97,7 +99,6 @@ def scrape_nybma():
         "source_url": url
     }]
 
-
 # -------------------------
 # Manhattan Resident Managers Club (first Thursday logic)
 # -------------------------
@@ -131,7 +132,6 @@ def scrape_mrmclub():
         })
     return events
 
-
 # -------------------------
 # Main runner
 # -------------------------
@@ -144,6 +144,10 @@ if __name__ == "__main__":
     all_events.extend(scrape_mrmclub())
 
     df = pd.DataFrame(all_events)
+
+    # Filter out past events
+    today = date.today().isoformat()
+    df = df[df["date"].notna() & (df["date"] >= today)]
 
     # Save CSV
     df.to_csv("events.csv", index=False)
@@ -160,4 +164,22 @@ if __name__ == "__main__":
             f.write("</li><br>\n")
         f.write("</ul>\n")
 
-    print("✅ Scraping complete. See events.csv and report.html")
+    # Save ICS calendar file
+    cal = Calendar()
+    for _, row in df.iterrows():
+        try:
+            e = Event()
+            e.name = f"{row['club']} — {row['title']}"
+            e.begin = row["date"]
+            if row["location"] != "N/A":
+                e.location = row["location"]
+            if row["source_url"]:
+                e.url = row["source_url"]
+            cal.events.add(e)
+        except Exception as ex:
+            print(f"⚠️ Could not add event: {ex}")
+
+    with open("events.ics", "w") as f:
+        f.writelines(cal)
+
+    print("✅ Scraping complete. See events.csv, report.html, and events.ics")
