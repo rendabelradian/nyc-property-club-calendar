@@ -172,22 +172,24 @@ if __name__ == "__main__":
             e.name = f"{row['club']} — {row['title']}"
 
             if row["date"]:
+                dt = datetime.strptime(row["date"], "%Y-%m-%d")
+
                 if row["club"] == "Emerald Guild":
-                    dt = datetime.strptime(row["date"], "%Y-%m-%d")
-                    e.begin = ny_tz.localize(dt.replace(hour=17, minute=0))
-                    e.end = ny_tz.localize(dt.replace(hour=20, minute=0))
+                    start = ny_tz.localize(dt.replace(hour=17, minute=0))
+                    end = ny_tz.localize(dt.replace(hour=20, minute=0))
                 elif row["club"] == "NYBMA":
-                    dt = datetime.strptime(row["date"], "%Y-%m-%d")
-                    e.begin = ny_tz.localize(dt.replace(hour=19, minute=30))
-                    e.end = ny_tz.localize(dt.replace(hour=21, minute=30))
+                    start = ny_tz.localize(dt.replace(hour=19, minute=30))
+                    end = ny_tz.localize(dt.replace(hour=21, minute=30))
                 elif row["club"] == "Manhattan Resident Managers Club":
-                    dt = datetime.strptime(row["date"], "%Y-%m-%d")
-                    e.begin = ny_tz.localize(dt.replace(hour=18, minute=0))
-                    e.end = ny_tz.localize(dt.replace(hour=21, minute=0))
-                else:  # IBMA default if time unknown
-                    dt = datetime.strptime(row["date"], "%Y-%m-%d")
-                    e.begin = ny_tz.localize(dt.replace(hour=18, minute=0))
-                    e.end = ny_tz.localize(dt.replace(hour=21, minute=0))
+                    start = ny_tz.localize(dt.replace(hour=18, minute=0))
+                    end = ny_tz.localize(dt.replace(hour=21, minute=0))
+                else:  # IBMA fallback
+                    start = ny_tz.localize(dt.replace(hour=18, minute=0))
+                    end = ny_tz.localize(dt.replace(hour=21, minute=0))
+
+                # Force ISO strings with timezone offset
+                e.begin = start.isoformat()
+                e.end = end.isoformat()
 
             if row["location"] != "N/A":
                 e.location = row["location"]
