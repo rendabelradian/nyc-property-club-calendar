@@ -137,10 +137,20 @@ def scrape_mrmclub():
 
 if __name__ == "__main__":
     all_events = []
-    all_events.extend(scrape_emerald_guild())
-    all_events.extend(scrape_ibma())
-    all_events.extend(scrape_nybma())
-    all_events.extend(scrape_mrmclub())
+
+    # ✅ Wrap each scraper so one failure doesn’t kill the workflow
+    scrapers = [
+        (scrape_emerald_guild, "Emerald Guild"),
+        (scrape_ibma, "IBMA"),
+        (scrape_nybma, "NYBMA"),
+        (scrape_mrmclub, "MRM Club"),
+    ]
+
+    for scraper, name in scrapers:
+        try:
+            all_events.extend(scraper())
+        except Exception as ex:
+            print(f"⚠️ {name} scraper failed: {ex}")
 
     df = pd.DataFrame(all_events)
 
